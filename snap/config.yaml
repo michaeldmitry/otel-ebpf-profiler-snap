@@ -1,11 +1,25 @@
 receivers:
   profiling:
     SamplesPerSecond: 19
+
+processors:
+  resourcedetection:
+    detectors: ["system"]
+    system:
+      hostname_sources: ["os"]
+      resource_attributes:
+        host.arch:
+          enabled: true
+
 exporters:
-  debug:
+  otlp:
+    endpoint: 10.1.194.174:42424
+    tls: 
+      insecure: true
+
 service:
   pipelines:
     profiles:
-      receivers: [profiling]
-      processors: []
-      exporters: [debug]
+      receivers: [ profiling ]
+      processors: [ resourcedetection ]
+      exporters: [ otlp ]

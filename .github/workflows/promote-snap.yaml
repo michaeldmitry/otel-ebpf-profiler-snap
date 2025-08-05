@@ -37,9 +37,9 @@ jobs:
           fi
       - name: Fetch Revision
         run: |
-          SNAP_RELEASES=$(curl -s -H "Snap-Device-Series: 16" "http://api.snapcraft.io/v2/snaps/info/opentelemetry-collector-ebpf-profiler?fields=revision")
+          SNAP_RELEASES=$(curl -s -H "Snap-Device-Series: 16" "http://api.snapcraft.io/v2/snaps/info/otel-ebpf-profiler?fields=revision")
           REVISION=$(echo $SNAP_RELEASES | jq '."channel-map"[] | select(.channel.risk=="${{ env.promote-from }}").revision')
           echo "revision=$REVISION" >> ${GITHUB_ENV}
       - name: Promote Snap
         run: |
-          snapcraft release opentelemetry-collector-ebpf-profiler ${{ env.revision }} ${{ env.promote-to }}
+          snapcraft release otel-ebpf-profiler ${{ env.revision }} ${{ env.promote-to }}

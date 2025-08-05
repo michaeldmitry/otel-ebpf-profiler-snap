@@ -1,7 +1,7 @@
 <h1 align="center">
   <img src="https://github.com/user-attachments/assets/977000e9-0f8c-466d-8388-719b2877c425" alt="[Project]" width=50%>
   <br />
-  OpenTelemetry Collector eBPF Profiler
+  OpenTelemetry eBPF Profiler
 </h1>
 
 
@@ -15,7 +15,7 @@
 
 ## Install
 
-    sudo snap install opentelemetry-collector-ebpf-profiler
+    sudo snap install otel-ebpf-profiler
 
 ([Don't have snapd installed?](https://snapcraft.io/docs/core/install))
 
@@ -23,6 +23,6 @@
 
 ## Configuration
 
-Once installed, a default configuration file will be created at `/etc/otelcol-ebpf-profiler/config.yaml`.
+Once installed, a default configuration file will be created at `/etc/otel-ebpf-profiler/config.yaml`.
 
 To write a configuration file to suit you needs, consult the [official documentation](https://opentelemetry.io/docs/collector/).

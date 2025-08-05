@@ -1,4 +1,4 @@
-name: opentelemetry-collector-ebpf-profiler
+name: otel-ebpf-profiler
 version: '0.130.0'
 summary: Whole-system, cross-language profiler for Linux via eBPF.
 description: |
@@ -6,7 +6,7 @@ description: |
   cross-language profiler for Linux via eBPF.
 contact: michael.dmitry@canonical.com
 license: Apache-2.0
-issues: https://github.com/canonical/opentelemetry-collector-ebpf-profiler-snap
+issues: https://github.com/canonical/otel-ebpf-profiler-snap
 base: core24
 platforms:
   amd64:
@@ -17,10 +17,10 @@ platforms:
     build-for: [arm64]
 confinement: classic
 apps:
-  opentelemetry-collector-ebpf-profiler:
+  otel-ebpf-profiler:
     daemon: simple
     # we need to enable service.profilesSupport feature gate to use the profiles pipeline
-    command: /bin/otelcol-ebpf-profiler --feature-gates service.profilesSupport --config /etc/otelcol-ebpf-profiler/config.yaml
+    command: /bin/otel-ebpf-profiler --feature-gates service.profilesSupport --config /etc/otel-ebpf-profiler/config.yaml
     install-mode: disable
     restart-condition: on-failure
 parts:
@@ -57,4 +57,4 @@ parts:
       # Create the binary
       wget https://raw.githubusercontent.com/open-telemetry/opentelemetry-collector-releases/refs/tags/v0.130.0/distributions/otelcol-ebpf-profiler/manifest.yaml -O ${CRAFT_PART_BUILD}/manifest.yaml
       builder --config="${CRAFT_PART_BUILD}/manifest.yaml"
-      install -D -m755 ${CRAFT_PART_BUILD}/_build/otelcol-ebpf-profiler ${CRAFT_PART_INSTALL}/bin/otelcol-ebpf-profiler
+      install -D -m755 ${CRAFT_PART_BUILD}/_build/otel-ebpf-profiler ${CRAFT_PART_INSTALL}/bin/otel-ebpf-profiler

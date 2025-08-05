@@ -77,8 +77,8 @@ jobs:
           token: ${{ secrets.OBSERVABILITY_NOCTUA_TOKEN }}
           committer: "Noctua <webops+observability-noctua-bot@canonical.com>"
           author: "Noctua <webops+observability-noctua-bot@canonical.com>"
-          commit-message: "chore(deps): bump opentelemetry-collector-ebpf-profiler version to ${{ steps.check.outputs.release }}"
-          title: "Update to opentelemetry-collector-ebpf-profiler ${{ steps.check.outputs.release }}"
-          body: Automated update to follow upstream [release](https://github.com/open-telemetry/opentelemetry-collector-releases/releases/tag/${{ steps.check.outputs.release }}) of opentelemetry-collector-ebpf-profiler.
+          commit-message: "chore(deps): bump otel-ebpf-profiler version to ${{ steps.check.outputs.release }}"
+          title: "Update to otel-ebpf-profiler ${{ steps.check.outputs.release }}"
+          body: Automated update to follow upstream [release](https://github.com/open-telemetry/opentelemetry-collector-releases/releases/tag/${{ steps.check.outputs.release }}) of otel-ebpf-profiler.
           branch: "chore/bump-version-to-${{ steps.check.outputs.release }}"
           delete-branch: true
