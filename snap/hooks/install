@@ -1,0 +1,8 @@
+#!/bin/sh -e
+
+mkdir -p /etc/otelcol-ebpf-profiler
+
+if [ ! -f "etc/otelcol-ebpf-profiler/config.yaml" ]
+then
+    install -D "${SNAP}/config.yaml" "/etc/otelcol-ebpf-profiler/config.yaml"
+fi

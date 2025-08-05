@@ -23,6 +23,6 @@
 
 ## Configuration
 
-Once installed, a default configuration file will be created at `/snap/opentelemetry-collector-ebpf-profiler/etc/config.yaml`. The snap will try to use all configuration files under the `/etc/otelcol-ebpf-profiler/config.d` folder, in alphabetical order. If none is present, it will use the default config file.
+Once installed, a default configuration file will be created at `/etc/otelcol-ebpf-profiler/config.yaml`.
 
 To write a configuration file to suit you needs, consult the [official documentation](https://opentelemetry.io/docs/collector/).

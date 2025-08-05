@@ -5,6 +5,7 @@ description: |
   An OpenTelemetry Collector distribution that is made specifically to be used as a whole-system,
   cross-language profiler for Linux via eBPF.
 contact: michael.dmitry@canonical.com
+license: Apache-2.0
 issues: https://github.com/canonical/opentelemetry-collector-ebpf-profiler-snap
 base: core24
 platforms:
@@ -18,23 +19,17 @@ confinement: classic
 apps:
   opentelemetry-collector-ebpf-profiler:
     daemon: simple
-    # command: bin/otelcol-ebpf-profiler --feature-gates service.profilesSupport --config $SNAP/etc/config.yaml
-    command: command-wrapper
+    # we need to enable service.profilesSupport feature gate to use the profiles pipeline
+    command: /bin/otelcol-ebpf-profiler --feature-gates service.profilesSupport --config /etc/otelcol-ebpf-profiler/config.yaml
     install-mode: disable
     restart-condition: on-failure
 parts:
-  wrapper:
-    plugin: dump
-    source: ./snap
-    source-type: local
-    override-build: |
-      cp local/command-wrapper $CRAFT_PART_INSTALL/
   config:
     plugin: dump
-    source: ./snap
+    source: ./snap/
     source-type: local
     override-build: |
-      install -D config.yaml $CRAFT_PART_INSTALL/etc/config.yaml
+      install -D config.yaml $CRAFT_PART_INSTALL/
   ocb:
     plugin: go
     source: "https://github.com/open-telemetry/opentelemetry-collector.git"
@@ -60,6 +55,6 @@ parts:
       - wget
     override-build: |
       # Create the binary
-      wget https://raw.githubusercontent.com/canonical/opentelemetry-collector-rock/refs/heads/main/0.130.0/manifest.yaml -O ${CRAFT_PART_BUILD}/snap/manifest.yaml
-      builder --config="${CRAFT_PART_BUILD}/snap/manifest.yaml"
-      install -D -m755 ${CRAFT_PART_BUILD}/_build/otelcol ${CRAFT_PART_INSTALL}/bin/otelcol-ebpf-profiler
+      wget https://raw.githubusercontent.com/open-telemetry/opentelemetry-collector-releases/refs/tags/v0.130.0/distributions/otelcol-ebpf-profiler/manifest.yaml -O ${CRAFT_PART_BUILD}/manifest.yaml
+      builder --config="${CRAFT_PART_BUILD}/manifest.yaml"
+      install -D -m755 ${CRAFT_PART_BUILD}/_build/otelcol-ebpf-profiler ${CRAFT_PART_INSTALL}/bin/otelcol-ebpf-profiler
