@@ -1,0 +1,29 @@
+#!/bin/sh
+
+log() {
+  echo "$1" | systemd-cat
+}
+
+launch_classic() {
+  DEFAULT_CONFIG_FILE="$SNAP/etc/config.yaml"
+  CONFIG_FOLDER="/etc/otelcol-ebpf-profiler/config.d"
+  # We need to enable service.profilesSupport feature gate to use the profiles pipeline
+  FEATURE_GATES="--feature-gates service.profilesSupport"
+
+  # If there is at least one file inside CONFIG_FOLDER
+  CONFIG_FILES="$(find $CONFIG_FOLDER -type f -size +0c -print)"
+  if [ -n "$CONFIG_FILES" ]; then
+      log "Launching with config files: $CONFIG_FILES"
+      CONFIG_ARG=""
+      for file in $CONFIG_FILES; do
+          CONFIG_ARG="${CONFIG_ARG} --config ${file}"
+      done
+      exec "$SNAP/bin/otelcol-ebpf-profiler" $FEATURE_GATES $CONFIG_ARG
+  fi
+  
+
+  log "Launching with minimal default config from the snap"
+  exec "$SNAP/bin/otelcol-ebpf-profiler" $FEATURE_GATES "--config" "$DEFAULT_CONFIG_FILE"
+}
+
+launch_classic

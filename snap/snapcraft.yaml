@@ -1,0 +1,65 @@
+name: opentelemetry-collector-ebpf-profiler
+version: '0.130.0'
+summary: Whole-system, cross-language profiler for Linux via eBPF.
+description: |
+  An OpenTelemetry Collector distribution that is made specifically to be used as a whole-system,
+  cross-language profiler for Linux via eBPF.
+contact: michael.dmitry@canonical.com
+issues: https://github.com/canonical/opentelemetry-collector-ebpf-profiler-snap
+base: core24
+platforms:
+  amd64:
+    build-on: [amd64]
+    build-for: [amd64]
+  arm64:
+    build-on: [arm64]
+    build-for: [arm64]
+confinement: classic
+apps:
+  opentelemetry-collector-ebpf-profiler:
+    daemon: simple
+    # command: bin/otelcol-ebpf-profiler --feature-gates service.profilesSupport --config $SNAP/etc/config.yaml
+    command: command-wrapper
+    install-mode: disable
+    restart-condition: on-failure
+parts:
+  wrapper:
+    plugin: dump
+    source: ./snap
+    source-type: local
+    override-build: |
+      cp local/command-wrapper $CRAFT_PART_INSTALL/
+  config:
+    plugin: dump
+    source: ./snap
+    source-type: local
+    override-build: |
+      install -D config.yaml $CRAFT_PART_INSTALL/etc/config.yaml
+  ocb:
+    plugin: go
+    source: "https://github.com/open-telemetry/opentelemetry-collector.git"
+    source-type: "git"
+    source-tag: "v0.130.0"
+    source-depth: 1
+    source-subdir: "cmd/builder"
+    build-snaps:
+      - go/1.23/stable
+    build-environment:
+      - CGO_ENABLED: "0"
+      - GOOS: linux
+    stage:
+      - bin/builder
+    prime:
+      - "-*"
+  ebpf-profiler:
+    after:
+      - ocb
+    plugin: dump
+    source: .
+    build-packages:
+      - wget
+    override-build: |
+      # Create the binary
+      wget https://raw.githubusercontent.com/canonical/opentelemetry-collector-rock/refs/heads/main/0.130.0/manifest.yaml -O ${CRAFT_PART_BUILD}/snap/manifest.yaml
+      builder --config="${CRAFT_PART_BUILD}/snap/manifest.yaml"
+      install -D -m755 ${CRAFT_PART_BUILD}/_build/otelcol ${CRAFT_PART_INSTALL}/bin/otelcol-ebpf-profiler
