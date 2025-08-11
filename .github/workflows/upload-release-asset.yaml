@@ -1,0 +1,24 @@
+on:
+    release:
+      types: [published]
+name: Upload Release Asset
+jobs:
+    build:
+        name: Upload Release Asset
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+        - name: Pack The Snap
+          uses: snapcore/action-build@v1
+          id: snap-build            
+        - name: Upload Release Asset
+          id: upload-release-asset 
+          uses: actions/upload-release-asset@v1
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            upload_url: ${{ github.event.release.upload_url }}
+            asset_path: ${{ steps.snap-build.outputs.snap }}
+            asset_name: otel-ebpf-profiler-${{ github.event.release.tag_name }}_amd.snap
+            asset_content_type: application/octet-stream
