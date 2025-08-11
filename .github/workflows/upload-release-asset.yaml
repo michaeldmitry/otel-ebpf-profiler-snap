@@ -12,9 +12,9 @@ jobs:
         - name: Pack The Snap
           uses: snapcore/action-build@v1
           id: snap-build            
-        - name: Set asset name
+        - name: Set Asset Name
           run: |
-            VERSION="${GITHUB_REF##*/}"
+            VERSION=$(echo $GITHUB_REF | sed 's#.*/##')
             ARCH="$(dpkg --print-architecture)"
             echo "ASSET_NAME=otel-ebpf-profiler-${VERSION}_${ARCH}.snap" >> $GITHUB_ENV
         - name: Upload Snap to release assets
