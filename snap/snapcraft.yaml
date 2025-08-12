@@ -19,11 +19,17 @@ confinement: classic
 apps:
   otel-ebpf-profiler:
     daemon: simple
-    # we need to enable service.profilesSupport feature gate to use the profiles pipeline
-    command: /bin/otel-ebpf-profiler --feature-gates service.profilesSupport --config /etc/otel-ebpf-profiler/config.yaml
+    # command: /bin/otel-ebpf-profiler --feature-gates service.profilesSupport --config /etc/otel-ebpf-profiler/config.yaml 2>&1  | tee -a "/var/log/otel-ebpf-profiler.log"
+    command: command-wrapper 
     install-mode: disable
     restart-condition: on-failure
 parts:
+  wrapper:
+    plugin: dump
+    source: ./snap/
+    source-type: local
+    override-build: |
+      install -D local/command-wrapper $CRAFT_PART_INSTALL/
   config:
     plugin: dump
     source: ./snap/
